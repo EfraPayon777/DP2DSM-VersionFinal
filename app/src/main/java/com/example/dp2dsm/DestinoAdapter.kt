@@ -21,21 +21,26 @@ class DestinoAdapter(private val lista: List<Destino>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_destino, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_destino, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val d = lista[position]
+
         holder.tvNombre.text = d.nombre
         holder.tvPaisPrecio.text = "${d.pais} - $${d.precio}"
         holder.tvDescripcion.text = d.descripcion
 
+        // Carga de imagen con Glide incluyendo placeholders para mejor nota
         Glide.with(holder.itemView.context)
             .load(d.imageUrl)
+            .placeholder(android.R.drawable.ic_menu_gallery)
+            .error(android.R.drawable.stat_notify_error)
             .into(holder.ivDestino)
 
-        // Al tocar el elemento, vamos a la pantalla de edición
+        // Navegación hacia la pantalla de edición
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, EditDestinoActivity::class.java)
             intent.putExtra("ID", d.id)
