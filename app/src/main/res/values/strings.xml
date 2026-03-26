@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">DP2DSM</string>
+    
+    <!-- Títulos y etiquetas -->
+    <string name="title_add_destination">Registrar Nuevo Destino</string>
+    <string name="hint_name">Nombre del destino</string>
+    <string name="hint_price">Precio del paquete</string>
+    <string name="hint_description">Descripción (mín. 20 caracteres)</string>
+    <string name="btn_select_image">Seleccionar Imagen</string>
+    <string name="btn_save">Guardar Destino</string>
+
+    <!-- Lista de países para el Spinner -->
+    <string-array name="paises_array">
+        <item>Seleccione un país</item>
+        <item>El Salvador</item>
+        <item>Guatemala</item>
+        <item>Honduras</item>
+        <item>Costa Rica</item>
+        <item>Panamá</item>
+        <item>México</item>
+        <item>España</item>
+    </string-array>
+
+    <!-- <string name="app_name">Agencia de Viajes UDB</string> -->
 </resources>
