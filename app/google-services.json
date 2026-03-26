@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "660066729017",
+    "project_id": "dp2dsm",
+    "storage_bucket": "dp2dsm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660066729017:android:1572a1808b9273acd121e8",
+        "android_client_info": {
+          "package_name": "com.example.dp2dsm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK1A50kQRRetEVnXthVJJmT_N7l_XHnvI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
