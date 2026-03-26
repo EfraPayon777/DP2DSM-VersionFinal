@@ -3,8 +3,6 @@ package com.example.dp2dsm
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.semantics.error
-import androidx.compose.ui.semantics.text
 import com.example.dp2dsm.databinding.ActivityAddDestinoBinding
 import com.example.dp2dsm.models.Destino
 import com.google.firebase.database.FirebaseDatabase
