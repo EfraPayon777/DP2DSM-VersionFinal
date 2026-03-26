@@ -30,23 +30,23 @@ class AddDestinoActivity : AppCompatActivity() {
         val url = binding.etImageUrl.text.toString().trim()
 
         if (nombre.isEmpty() || precioStr.isEmpty() || descripcion.isEmpty() || url.isEmpty()) {
-            Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (binding.spnPais.selectedItemPosition == 0) {
-            Toast.makeText(this, "Seleccione un país", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Por favor, seleccione un país", Toast.LENGTH_SHORT).show()
             return
         }
 
         val precio = precioStr.toDoubleOrNull() ?: 0.0
         if (precio <= 0) {
-            binding.etPrecio.error = "Precio mayor a 0"
+            binding.etPrecio.error = "El precio debe ser mayor a 0"
             return
         }
 
         if (descripcion.length < 20) {
-            binding.etDescripcion.error = "Mínimo 20 caracteres"
+            binding.etDescripcion.error = "La descripción debe tener al menos 20 caracteres"
             return
         }
 
@@ -55,14 +55,18 @@ class AddDestinoActivity : AppCompatActivity() {
 
     private fun guardar(nom: String, pa: String, pre: Double, desc: String, url: String) {
         val id = database.push().key
-        val destino = Destino(id, nom, pa, pre, desc, url)
+
         if (id != null) {
+            val destino = Destino(id, nom, pa, pre, desc, url)
+
             database.child(id).setValue(destino).addOnSuccessListener {
-                Toast.makeText(this, "Destino Guardado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Destino guardado con éxito", Toast.LENGTH_SHORT).show()
                 finish()
             }.addOnFailureListener {
-                Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error al guardar en la base de datos", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(this, "Error al generar ID de destino", Toast.LENGTH_SHORT).show()
         }
     }
 }
