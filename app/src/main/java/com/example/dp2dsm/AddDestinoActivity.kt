@@ -27,21 +27,21 @@ class AddDestinoActivity : AppCompatActivity() {
         val pais = binding.spnPais.selectedItem.toString()
         val precioStr = binding.etPrecio.text.toString().trim()
         val descripcion = binding.etDescripcion.text.toString().trim()
-        val urlImagen = binding.etImageUrl.text.toString().trim()
+        val url = binding.etImageUrl.text.toString().trim()
 
-        if (nombre.isEmpty() || precioStr.isEmpty() || descripcion.isEmpty() || urlImagen.isEmpty()) {
-            Toast.makeText(this, "Por favor complete todos los campos", Toast.LENGTH_SHORT).show()
+        if (nombre.isEmpty() || precioStr.isEmpty() || descripcion.isEmpty() || url.isEmpty()) {
+            Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (binding.spnPais.selectedItemPosition == 0) {
-            Toast.makeText(this, "Por favor seleccione un país", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Seleccione un país", Toast.LENGTH_SHORT).show()
             return
         }
 
         val precio = precioStr.toDoubleOrNull() ?: 0.0
         if (precio <= 0) {
-            binding.etPrecio.error = "El precio debe ser mayor a 0"
+            binding.etPrecio.error = "Precio mayor a 0"
             return
         }
 
@@ -50,21 +50,18 @@ class AddDestinoActivity : AppCompatActivity() {
             return
         }
 
-        guardarEnFirebase(nombre, pais, precio, descripcion, urlImagen)
+        guardar(nombre, pais, precio, descripcion, url)
     }
 
-    private fun guardarEnFirebase(nombre: String, pais: String, precio: Double, desc: String, url: String) {
+    private fun guardar(nom: String, pa: String, pre: Double, desc: String, url: String) {
         val id = database.push().key
-        val destino = Destino(id, nombre, pais, precio, desc, url)
-
+        val destino = Destino(id, nom, pa, pre, desc, url)
         if (id != null) {
-            database.child(id).setValue(destino).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Destino guardado con éxito", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
-                }
+            database.child(id).setValue(destino).addOnSuccessListener {
+                Toast.makeText(this, "Destino Guardado", Toast.LENGTH_SHORT).show()
+                finish()
+            }.addOnFailureListener {
+                Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
             }
         }
     }

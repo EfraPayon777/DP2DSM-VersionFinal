@@ -17,7 +17,14 @@
             android:textStyle="bold"
             android:textColor="@color/primary"
             android:layout_marginBottom="20dp"
-            android:textAlign="center"/>
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del destino"
+            android:inputType="textCapSentences" />
 
         <EditText
             android:id="@+id/etImageUrl"
@@ -50,23 +57,6 @@
             android:inputType="textMultiLine"
             android:minLines="3"
             android:layout_marginTop="10dp" />
-
-        <Button
-            android:id="@+id/btnSelectImage"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/btn_select_image"
-            android:textColor="@color/accent" />
-
-        <ImageView
-            android:id="@+id/ivPreview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="centerCrop"
-            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnSave"

@@ -43,14 +43,15 @@ class MainActivity : AppCompatActivity() {
                 listaDestinos.clear()
                 for (data in snapshot.children) {
                     val destino = data.getValue(Destino::class.java)
-                    destino?.let { listaDestinos.add(it) }
+                    destino?.let {
+                        it.id = data.key
+                        listaDestinos.add(it)
+                    }
                 }
                 adapter.notifyDataSetChanged()
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Error al leer base de datos
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 }
