@@ -9,24 +9,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_title"
-        android:textSize="28sp"
+        android:text="Agencia de Viajes"
+        android:textSize="32sp"
         android:textColor="@color/primary"
         android:textStyle="bold"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="40dp"/>
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/email_hint"
+        android:hint="Correo"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/pass_hint"
+        android:hint="Contraseña"
         android:inputType="textPassword"
         android:layout_marginTop="12dp" />
 
@@ -34,7 +34,7 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_login"
+        android:text="Ingresar"
         android:backgroundTint="@color/primary"
         android:layout_marginTop="24dp" />
 
@@ -42,7 +42,7 @@
         android:id="@+id/tvGoRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_go_register"
+        android:text="¿No tienes cuenta? Regístrate"
         android:textColor="@color/accent"
         android:layout_marginTop="16dp" />
 

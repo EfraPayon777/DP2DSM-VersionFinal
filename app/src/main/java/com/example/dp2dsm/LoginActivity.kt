@@ -19,6 +19,12 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        // Si ya está logueado, saltar al MainActivity
+        if (auth.currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val pass = binding.etPassword.text.toString().trim()
@@ -33,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "Por favor llene todos los campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
 
