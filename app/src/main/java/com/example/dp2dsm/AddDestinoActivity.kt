@@ -1,38 +1,23 @@
 package com.example.dp2dsm
 
-import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.text
-import androidx.glance.visibility
 import com.example.dp2dsm.databinding.ActivityAddDestinoBinding
+import com.example.dp2dsm.models.Destino
+import com.google.firebase.database.FirebaseDatabase
 
 class AddDestinoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddDestinoBinding
-    private var imageUri: Uri? = null
-
-    private val getContent =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                imageUri = it
-                binding.ivPreview.visibility = View.VISIBLE
-                binding.ivPreview.setImageURI(it)
-            }
-        }
+    private val database = FirebaseDatabase.getInstance().getReference("destinos")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddDestinoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.btnSelectImage.setOnClickListener {
-            getContent.launch("image/*")
-        }
 
         binding.btnSave.setOnClickListener {
             validarDatos()
@@ -44,8 +29,9 @@ class AddDestinoActivity : AppCompatActivity() {
         val pais = binding.spnPais.selectedItem.toString()
         val precioStr = binding.etPrecio.text.toString().trim()
         val descripcion = binding.etDescripcion.text.toString().trim()
+        val urlImagen = binding.etImageUrl.text.toString().trim()
 
-        if (nombre.isEmpty() || precioStr.isEmpty() || descripcion.isEmpty()) {
+        if (nombre.isEmpty() || precioStr.isEmpty() || descripcion.isEmpty() || urlImagen.isEmpty()) {
             Toast.makeText(this, "Por favor complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
@@ -66,20 +52,22 @@ class AddDestinoActivity : AppCompatActivity() {
             return
         }
 
-        if (imageUri == null) {
-            Toast.makeText(this, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        subirImagenFirebase(nombre, pais, precio, descripcion)
+        guardarEnFirebase(nombre, pais, precio, descripcion, urlImagen)
     }
 
-    private fun subirImagenFirebase(
-        nombre: String,
-        pais: String,
-        precio: Double,
-        descripcion: String
-    ) {
-        Toast.makeText(this, "Subiendo destino...", Toast.LENGTH_SHORT).show()
+    private fun guardarEnFirebase(nombre: String, pais: String, precio: Double, desc: String, url: String) {
+        val id = database.push().key
+        val destino = Destino(id, nombre, pais, precio, desc, url)
+
+        if (id != null) {
+            database.child(id).setValue(destino).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Destino guardado con éxito", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }
