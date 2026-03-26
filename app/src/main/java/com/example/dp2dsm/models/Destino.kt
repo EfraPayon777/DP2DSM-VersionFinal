@@ -8,8 +8,8 @@ data class Destino(
     val precio: Double = 0.0,
     val descripcion: String = "",
     val imageUrl: String = "",
-    val userId: String? = null // Identificador del Agente que creó el registro
+    val userId: String? = null
 ) {
-    // Constructor vacío requerido por Firebase Realtime Database para la deserialización
+
     constructor() : this(null, "", "", 0.0, "", "", null)
 }

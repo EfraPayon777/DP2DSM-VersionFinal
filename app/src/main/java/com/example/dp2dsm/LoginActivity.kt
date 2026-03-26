@@ -19,7 +19,6 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // Si ya está logueado, saltar al MainActivity
         if (auth.currentUser != null) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()

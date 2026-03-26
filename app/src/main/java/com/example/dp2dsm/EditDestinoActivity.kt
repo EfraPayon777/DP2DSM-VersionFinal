@@ -32,7 +32,7 @@ class EditDestinoActivity : AppCompatActivity() {
         val url = intent.getStringExtra("URL")
 
         // VERIFICACIÓN DE SEGURIDAD:
-        // Si por algún motivo alguien llega aquí y no es el dueño, lo sacamos.
+
         val currentUserId = auth.currentUser?.uid
         if (destinoOwnerId != currentUserId) {
             Toast.makeText(this, "Acceso denegado: No eres el autor de este destino", Toast.LENGTH_LONG).show()
@@ -48,7 +48,7 @@ class EditDestinoActivity : AppCompatActivity() {
 
         // Configurar el Spinner del país
         val adapterPaises = ArrayAdapter.createFromResource(this, R.array.paises_array, android.R.layout.simple_spinner_item)
-        binding.spnPais.adapter = adapterPaises // Aseguramos que el adapter esté asignado
+        binding.spnPais.adapter = adapterPaises
 
         val position = adapterPaises.getPosition(pais)
         if (position >= 0) {

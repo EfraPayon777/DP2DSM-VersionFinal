@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 6. Lógica para cerrar sesión
-        // Nota: Asegúrate de que el botón en activity_main.xml tenga el id: btnLogout
         binding.btnLogout.setOnClickListener {
             auth.signOut()
             Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
