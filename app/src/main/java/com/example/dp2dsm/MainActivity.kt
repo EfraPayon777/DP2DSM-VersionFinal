@@ -2,6 +2,7 @@ package com.example.dp2dsm
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dp2dsm.databinding.ActivityMainBinding
@@ -22,62 +23,72 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 1. Inicializar Firebase Auth y verificar sesión
+        // 1. Inicializar Firebase Auth y verificar sesión activa
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser == null) {
             irAlLogin()
             return
         }
 
-        // 2. Inicializar base de datos y lista
+        // 2. Inicializar referencia a la base de datos "destinos"
         database = FirebaseDatabase.getInstance().getReference("destinos")
         listaDestinos = mutableListOf()
 
-        // 3. Configurar UI
+        // 3. Configurar la interfaz de usuario (RecyclerView)
         setupRecyclerView()
+
+        // 4. Iniciar la escucha de datos en tiempo real
         obtenerDestinos()
 
-        // 4. Configurar eventos de botones
+        // 5. Evento para navegar a la pantalla de registro de nuevo destino
         binding.fabAdd.setOnClickListener {
             startActivity(Intent(this, AddDestinoActivity::class.java))
         }
 
-        // Lógica para cerrar sesión (Asegúrate de tener el ID btnLogout en tu activity_main.xml)
+        // 6. Lógica para cerrar sesión
+        // Nota: Asegúrate de que el botón en activity_main.xml tenga el id: btnLogout
         binding.btnLogout.setOnClickListener {
             auth.signOut()
+            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
             irAlLogin()
         }
     }
 
     private fun irAlLogin() {
         val intent = Intent(this, LoginActivity::class.java)
+        // Limpiamos el stack de actividades para que el usuario no pueda regresar con el botón atrás
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }
 
     private fun setupRecyclerView() {
+        // Inicializamos el adaptador con nuestra lista mutable
         adapter = DestinoAdapter(listaDestinos)
         binding.rvDestinos.layoutManager = LinearLayoutManager(this)
         binding.rvDestinos.adapter = adapter
     }
 
     private fun obtenerDestinos() {
+        // Listener que se activa cada vez que hay un cambio en el nodo "destinos"
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listaDestinos.clear()
                 for (data in snapshot.children) {
+                    // Firebase convierte el JSON automáticamente al modelo Destino
                     val destino = data.getValue(Destino::class.java)
                     destino?.let {
-                        // Seteamos el ID desde la llave de Firebase para poder editar/eliminar luego
+                        // Importante: El ID se toma de la clave del nodo en Firebase
                         it.id = data.key
                         listaDestinos.add(it)
                     }
                 }
+                // Notificamos al adaptador que los datos han cambiado para refrescar la vista
                 adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Opcional: Mostrar un Toast en caso de error de permisos
+                Toast.makeText(this@MainActivity, "Error al cargar datos: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }

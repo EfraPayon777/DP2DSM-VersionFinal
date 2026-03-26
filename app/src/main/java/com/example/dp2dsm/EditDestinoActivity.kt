@@ -6,13 +6,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dp2dsm.databinding.ActivityEditDestinoBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class EditDestinoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditDestinoBinding
     private val database = FirebaseDatabase.getInstance().getReference("destinos")
+    private val auth = FirebaseAuth.getInstance()
     private var destinoId: String? = null
+    private var destinoOwnerId: String? = null // Para almacenar quién es el dueño
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +24,21 @@ class EditDestinoActivity : AppCompatActivity() {
 
         // 1. Obtener los datos enviados desde el Adaptador
         destinoId = intent.getStringExtra("ID")
+        destinoOwnerId = intent.getStringExtra("USER_ID") // Recibimos el ID del autor
         val nombre = intent.getStringExtra("NOMBRE")
         val pais = intent.getStringExtra("PAIS")
         val precio = intent.getDoubleExtra("PRECIO", 0.0)
         val desc = intent.getStringExtra("DESC")
         val url = intent.getStringExtra("URL")
+
+        // VERIFICACIÓN DE SEGURIDAD:
+        // Si por algún motivo alguien llega aquí y no es el dueño, lo sacamos.
+        val currentUserId = auth.currentUser?.uid
+        if (destinoOwnerId != currentUserId) {
+            Toast.makeText(this, "Acceso denegado: No eres el autor de este destino", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
         // 2. Llenar los campos con la información actual
         binding.etNombre.setText(nombre)
@@ -35,7 +48,12 @@ class EditDestinoActivity : AppCompatActivity() {
 
         // Configurar el Spinner del país
         val adapterPaises = ArrayAdapter.createFromResource(this, R.array.paises_array, android.R.layout.simple_spinner_item)
-        binding.spnPais.setSelection(adapterPaises.getPosition(pais))
+        binding.spnPais.adapter = adapterPaises // Aseguramos que el adapter esté asignado
+
+        val position = adapterPaises.getPosition(pais)
+        if (position >= 0) {
+            binding.spnPais.setSelection(position)
+        }
 
         // 3. Botón Actualizar
         binding.btnUpdate.setOnClickListener { validarYActualizar() }
@@ -64,7 +82,7 @@ class EditDestinoActivity : AppCompatActivity() {
 
         val pre = preStr.toDoubleOrNull() ?: 0.0
 
-        // Crear mapa con los nuevos datos
+        // Crear mapa con los nuevos datos (No incluimos userId porque no debe cambiar)
         val updates = mapOf(
             "nombre" to nom,
             "pais" to pai,
@@ -89,8 +107,10 @@ class EditDestinoActivity : AppCompatActivity() {
             .setPositiveButton("Eliminar") { _, _ ->
                 destinoId?.let {
                     database.child(it).removeValue().addOnSuccessListener {
-                        Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Eliminado correctamente", Toast.LENGTH_SHORT).show()
                         finish()
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

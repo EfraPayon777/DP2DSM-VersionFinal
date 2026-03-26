@@ -5,12 +5,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dp2dsm.databinding.ActivityAddDestinoBinding
 import com.example.dp2dsm.models.Destino
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class AddDestinoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddDestinoBinding
     private val database = FirebaseDatabase.getInstance().getReference("destinos")
+    // Instancia de FirebaseAuth para obtener el ID del usuario logueado
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +58,20 @@ class AddDestinoActivity : AppCompatActivity() {
 
     private fun guardar(nom: String, pa: String, pre: Double, desc: String, url: String) {
         val id = database.push().key
+        // Obtenemos el UID del agente que está creando el destino
+        val currentUserId = auth.currentUser?.uid
 
-        if (id != null) {
-            val destino = Destino(id, nom, pa, pre, desc, url)
+        if (id != null && currentUserId != null) {
+            // Creamos el objeto Destino incluyendo el userId del autor
+            val destino = Destino(
+                id = id,
+                nombre = nom,
+                pais = pa,
+                precio = pre,
+                descripcion = desc,
+                imageUrl = url,
+                userId = currentUserId
+            )
 
             database.child(id).setValue(destino).addOnSuccessListener {
                 Toast.makeText(this, "Destino guardado con éxito", Toast.LENGTH_SHORT).show()
@@ -66,7 +80,7 @@ class AddDestinoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al guardar en la base de datos", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(this, "Error al generar ID de destino", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error: No se pudo verificar la sesión del usuario", Toast.LENGTH_SHORT).show()
         }
     }
 }
