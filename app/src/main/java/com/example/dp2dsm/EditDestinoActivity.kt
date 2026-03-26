@@ -19,70 +19,77 @@ class EditDestinoActivity : AppCompatActivity() {
         binding = ActivityEditDestinoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 1. Obtener los datos enviados desde el Adaptador
         destinoId = intent.getStringExtra("ID")
-        binding.etNombre.setText(intent.getStringExtra("NOMBRE"))
-        binding.etPrecio.setText(intent.getDoubleExtra("PRECIO", 0.0).toString())
-        binding.etDescripcion.setText(intent.getStringExtra("DESC"))
-        binding.etImageUrl.setText(intent.getStringExtra("URL"))
+        val nombre = intent.getStringExtra("NOMBRE")
+        val pais = intent.getStringExtra("PAIS")
+        val precio = intent.getDoubleExtra("PRECIO", 0.0)
+        val desc = intent.getStringExtra("DESC")
+        val url = intent.getStringExtra("URL")
 
-        val paisActual = intent.getStringExtra("PAIS")
-        val adapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.paises_array,
-            android.R.layout.simple_spinner_item
-        )
-        binding.spnPais.setSelection(adapter.getPosition(paisActual))
+        // 2. Llenar los campos con la información actual
+        binding.etNombre.setText(nombre)
+        binding.etPrecio.setText(precio.toString())
+        binding.etDescripcion.setText(desc)
+        binding.etImageUrl.setText(url)
 
+        // Configurar el Spinner del país
+        val adapterPaises = ArrayAdapter.createFromResource(this, R.array.paises_array, android.R.layout.simple_spinner_item)
+        binding.spnPais.setSelection(adapterPaises.getPosition(pais))
+
+        // 3. Botón Actualizar
         binding.btnUpdate.setOnClickListener { validarYActualizar() }
-        binding.btnDelete.setOnClickListener { confirmarEliminacion() }
+
+        // 4. Botón Eliminar
+        binding.btnDelete.setOnClickListener { mostrarDialogoConfirmacion() }
     }
 
     private fun validarYActualizar() {
-        val nombre = binding.etNombre.text.toString().trim()
-        val precioStr = binding.etPrecio.text.toString().trim()
-        val desc = binding.etDescripcion.text.toString().trim()
+        val id = destinoId ?: return
+        val nom = binding.etNombre.text.toString().trim()
+        val preStr = binding.etPrecio.text.toString().trim()
+        val des = binding.etDescripcion.text.toString().trim()
         val url = binding.etImageUrl.text.toString().trim()
-        val pais = binding.spnPais.selectedItem.toString()
+        val pai = binding.spnPais.selectedItem.toString()
 
-        if (nombre.isEmpty() || precioStr.isEmpty() || desc.isEmpty() || url.isEmpty()) {
-            Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
+        if (nom.isEmpty() || preStr.isEmpty() || des.isEmpty() || url.isEmpty()) {
+            Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val precio = precioStr.toDoubleOrNull() ?: 0.0
-        if (precio <= 0) {
-            binding.etPrecio.error = "Precio debe ser mayor a 0"
-            return
-        }
-
-        if (desc.length < 20) {
+        if (des.length < 20) {
             binding.etDescripcion.error = "Mínimo 20 caracteres"
             return
         }
 
-        val map = mapOf(
-            "nombre" to nombre,
-            "pais" to pais,
-            "precio" to precio,
-            "descripcion" to desc,
+        val pre = preStr.toDoubleOrNull() ?: 0.0
+
+        // Crear mapa con los nuevos datos
+        val updates = mapOf(
+            "nombre" to nom,
+            "pais" to pai,
+            "precio" to pre,
+            "descripcion" to des,
             "imageUrl" to url
         )
 
-        destinoId?.let {
-            database.child(it).updateChildren(map).addOnSuccessListener {
-                Toast.makeText(this, "Actualizado correctamente", Toast.LENGTH_SHORT).show()
-                finish()
-            }
+        // Guardar en Firebase
+        database.child(id).updateChildren(updates).addOnSuccessListener {
+            Toast.makeText(this, "Actualizado correctamente", Toast.LENGTH_SHORT).show()
+            finish()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun confirmarEliminacion() {
+    private fun mostrarDialogoConfirmacion() {
         AlertDialog.Builder(this)
-            .setTitle("Confirmar")
-            .setMessage("¿Desea eliminar este destino?")
+            .setTitle("Eliminar Destino")
+            .setMessage("¿Estás seguro de que deseas borrar este destino? Esta acción no se puede deshacer.")
             .setPositiveButton("Eliminar") { _, _ ->
                 destinoId?.let {
                     database.child(it).removeValue().addOnSuccessListener {
+                        Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show()
                         finish()
                     }
                 }

@@ -1,13 +1,30 @@
 <resources>
-    <string name="app_name">DP2DSM</string>
-    
-    <!-- Títulos y etiquetas -->
+    <string name="app_name">Agencia de Viajes UDB</string>
+
+    <!-- Autenticación -->
+    <string name="login_title">Inicio de Sesión</string>
+    <string name="register_title">Registro de Agente</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="pass_hint">Contraseña</string>
+    <string name="btn_login">Entrar</string>
+    <string name="btn_go_register">¿No tienes cuenta? Regístrate</string>
+
+    <!-- CRUD de Destinos -->
     <string name="title_add_destination">Registrar Nuevo Destino</string>
+    <string name="title_edit_destination">Editar Destino</string>
     <string name="hint_name">Nombre del destino</string>
     <string name="hint_price">Precio del paquete</string>
     <string name="hint_description">Descripción (mín. 20 caracteres)</string>
-    <string name="btn_select_image">Seleccionar Imagen</string>
+    <string name="hint_image_url">URL de la imagen</string>
     <string name="btn_save">Guardar Destino</string>
+    <string name="btn_update">Actualizar Cambios</string>
+    <string name="btn_delete">Eliminar Destino</string>
+
+    <!-- Diálogos -->
+    <string name="delete_confirm_title">¿Eliminar destino?</string>
+    <string name="delete_confirm_msg">Esta acción no se puede deshacer.</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 
     <!-- Lista de países para el Spinner -->
     <string-array name="paises_array">
@@ -20,29 +37,4 @@
         <item>México</item>
         <item>España</item>
     </string-array>
-    <string name="title_edit_destination">Editar Destino</string>
-    <string name="btn_update">Actualizar</string>
-    <string name="btn_delete">Eliminar</string>
-    <string name="login_title">Inicio de Sesión</string>
-    <string name="register_title">Registro de Agente</string>
-    <string name="email_hint">Correo electrónico</string>
-    <string name="pass_hint">Contraseña</string>
-    <string name="btn_login">Entrar</string>
-    <string name="btn_go_register">¿No tienes cuenta? Regístrate</string>
-
-    <!-- <string name="app_name">Agencia de Viajes UDB</string> -->
-
-    <!-- <string name="app_name">Agencia de Viajes UDB</string> -->
-
-    <!-- <string name="title_add_destination">Registrar Destino</string> -->
-
-
-    <!-- <string-array name="paises_array">
-        <item>Seleccione un país</item>
-        <item>El Salvador</item>
-        <item>Guatemala</item>
-        <item>Honduras</item>
-        <item>México</item>
-        <item>Costa Rica</item>
-    </string-array> -->
 </resources>

@@ -12,10 +12,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_edit_destination"
+            android:text="Editar Destino"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/primary"
+            android:textColor="#004A99"
             android:layout_marginBottom="20dp"
             android:gravity="center"/>
 
@@ -23,15 +23,13 @@
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del destino"
-            android:inputType="textCapSentences" />
+            android:hint="Nombre del destino" />
 
         <EditText
             android:id="@+id/etImageUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="URL de la imagen"
-            android:inputType="textUri"
             android:layout_marginTop="10dp" />
 
         <Spinner
@@ -45,7 +43,7 @@
             android:id="@+id/etPrecio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_price"
+            android:hint="Precio"
             android:inputType="numberDecimal"
             android:layout_marginTop="10dp" />
 
@@ -53,8 +51,7 @@
             android:id="@+id/etDescripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_description"
-            android:inputType="textMultiLine"
+            android:hint="Descripción (mín. 20 caracteres)"
             android:minLines="3"
             android:layout_marginTop="10dp" />
 
@@ -63,16 +60,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/primary"
-            android:text="@string/btn_update" />
+            android:text="Actualizar Cambios" />
 
         <Button
             android:id="@+id/btnDelete"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:backgroundTint="@color/accent"
-            android:text="@string/btn_delete" />
+            android:text="Eliminar Destino"
+            android:textColor="#FF0000" />
 
     </LinearLayout>
 </ScrollView>

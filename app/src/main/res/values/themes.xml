@@ -1,9 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.DP2DSM" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+    <!-- Tema principal de la App -->
+    <style name="Theme.DP2DSM" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Color Primario: Verde (#8BC34A) -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/primary_light</item>
 
-    <style name="Theme.DP2DSM" parent="Base.Theme.DP2DSM" />
+        <!-- Color de Acento: Naranja (#FF5722) -->
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Color de la Barra de Estado -->
+        <item name="android:statusBarColor">@color/primary_dark</item>
+
+        <!-- Fondo de la ventana -->
+        <item name="android:windowBackground">@color/white</item>
+    </style>
 </resources>
