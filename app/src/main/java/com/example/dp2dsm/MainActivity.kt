@@ -22,23 +22,37 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Verificar si el usuario está autenticado
+        // 1. Inicializar Firebase Auth y verificar sesión
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            irAlLogin()
             return
         }
 
+        // 2. Inicializar base de datos y lista
         database = FirebaseDatabase.getInstance().getReference("destinos")
         listaDestinos = mutableListOf()
 
+        // 3. Configurar UI
         setupRecyclerView()
         obtenerDestinos()
 
+        // 4. Configurar eventos de botones
         binding.fabAdd.setOnClickListener {
             startActivity(Intent(this, AddDestinoActivity::class.java))
         }
+
+        // Lógica para cerrar sesión (Asegúrate de tener el ID btnLogout en tu activity_main.xml)
+        binding.btnLogout.setOnClickListener {
+            auth.signOut()
+            irAlLogin()
+        }
+    }
+
+    private fun irAlLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun setupRecyclerView() {
@@ -54,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                 for (data in snapshot.children) {
                     val destino = data.getValue(Destino::class.java)
                     destino?.let {
+                        // Seteamos el ID desde la llave de Firebase para poder editar/eliminar luego
                         it.id = data.key
                         listaDestinos.add(it)
                     }
@@ -62,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Manejar error de lectura si es necesario
+                // Opcional: Mostrar un Toast en caso de error de permisos
             }
         })
     }
